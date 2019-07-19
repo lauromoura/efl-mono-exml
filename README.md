@@ -11,10 +11,14 @@ It will be composed of:
 
 # Building and testing
 
-EXML# currently uses [Meson](https://mesonbuild.com/) and Mono for building. Dotnet core integration is also planned.
+EXML# currently uses [Meson](https://mesonbuild.com/), Mono and EFL# (the latter
+for testing purposes for now) for building. Dotnet core integration is
+also planned.
 
 ```
-$ meson build
+# Make sure MONO_PATH (or the parameter you give to `-Dmono-path=` points to the
+# *directory* that contains `efl-mono.dll`
+$ meson build -Dmono-path=$MONO_PATH
 $ cd build
 $ ninja
 $ meson test
