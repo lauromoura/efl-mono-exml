@@ -18,7 +18,8 @@ public class Widget
     private static ApiModel.API s_api;
 
     public string Name { get; set; }
-    public Dictionary<string, string> Attributes { get; set; }
+    public Dictionary<string, string> Properties { get; set; }
+    public Dictionary<string, string> EventHandlers { get; set; }
     public List<Widget> Children { get; set; }
     public Widget Parent { get; set; }
 
@@ -27,7 +28,8 @@ public class Widget
 
     public Widget()
     {
-        Attributes = new Dictionary<string, string>();
+        Properties = new Dictionary<string, string>();
+        EventHandlers = new Dictionary<string, string>();
         Children = new List<Widget>();
     }
 
@@ -67,6 +69,7 @@ public class Widget
         // TODO: Rule: Does the property exist?
         // TODO: Rule: Is the property writable?
         // TODO: Rule: Is the value acceptable for the property?
+        // TODO: Differentiate between events and properties
         return new List<ValidatorModel.ValidationIssue>();
     }
 
@@ -97,9 +100,9 @@ public class Widget
 
         sb.AppendLine(spaces + $"Widget: {Name}");
 
-        foreach (var entry in Attributes)
+        foreach (var entry in Properties)
         {
-            sb.AppendLine(spaces + $"    attrib: {entry.Key} => {entry.Value}");
+            sb.AppendLine(spaces + $"    property: {entry.Key} => {entry.Value}");
         }
 
         if (Children.Count > 0)
