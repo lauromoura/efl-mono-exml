@@ -26,8 +26,7 @@ public class ValidationIssue
     public string Details { get; private set; }
     public ValidationIssueSeverity Severity { get; private set; }
 
-    public ValidationIssue(string message, string details, ValidationIssueSeverity severity,
-                           IXmlLineInfo lineInfo = null)
+    public ValidationIssue(string message, string details, ValidationIssueSeverity severity, IXmlLineInfo lineInfo = null)
     {
         Message = message;
         Details = details;
@@ -48,7 +47,7 @@ public class ValidationIssue
         }
     }
 
-    public override String ToString()
+    public override string ToString()
     {
         return $"[line:{Line}, pos[{Position}]: {Severity} - {Message}";
     }
@@ -58,7 +57,8 @@ public class ValidationException : Exception
 {
     public List<ValidationIssue> Issues { get; private set; }
 
-    public ValidationException(string message) : base(message)
+    public ValidationException(string message)
+        : base(message)
     {
         Issues = new List<ValidationIssue>();
     }

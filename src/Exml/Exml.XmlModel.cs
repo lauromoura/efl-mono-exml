@@ -42,8 +42,10 @@ public class Widget
 
         if (_class == null)
         {
-            issues.Add(new ValidatorModel.ValidationIssue($"Unknown type {name}", "Type could not be found either in the Efl.Ui namespace or fully qualified",
-                                                          ValidatorModel.ValidationIssueSeverity.Error));
+            issues.Add(new ValidatorModel.ValidationIssue(
+                        $"Unknown type {name}",
+                        "Type could not be found either in the Efl.Ui namespace or fully qualified",
+                        ValidatorModel.ValidationIssueSeverity.Error));
         }
 
         // TODO: Is it a container?
@@ -68,9 +70,9 @@ public class Widget
             return issues;
         }
 
-        if (String.IsNullOrEmpty(attrName))
+        if (string.IsNullOrEmpty(attrName))
         {
-            issues.Add(new ValidatorModel.ValidationIssue("Null or empty attribute name", "", ValidatorModel.ValidationIssueSeverity.Error));
+            issues.Add(new ValidatorModel.ValidationIssue("Null or empty attribute name", string.Empty, ValidatorModel.ValidationIssueSeverity.Error));
             return issues; // No sense continue checking from here
         }
 
@@ -84,12 +86,14 @@ public class Widget
 
         // Skip prefix "efl:" and capitalize first letter
         var prefix = "efl:";
-        var actualName =  attrName.Substring(prefix.Length, 1).ToUpper() + attrName.Substring(prefix.Length + 1);
+        var actualName = attrName.Substring(prefix.Length, 1).ToUpper() + attrName.Substring(prefix.Length + 1);
 
         if (Attributes.TryGetValue(actualName, out var currentValue))
         {
-            issues.Add(new ValidatorModel.ValidationIssue($"Attribute \"{attrName}\" is already defined", "",
-                                                          ValidatorModel.ValidationIssueSeverity.Warning));
+            issues.Add(new ValidatorModel.ValidationIssue(
+                        $"Attribute \"{attrName}\" is already defined",
+                        string.Empty,
+                        ValidatorModel.ValidationIssueSeverity.Warning));
             return issues;
         }
 
@@ -100,9 +104,10 @@ public class Widget
 
             if (evt == null)
             {
-                issues.Add(new ValidatorModel.ValidationIssue($"Event \"{attrName.Substring(prefix.Length)}\" does not exist in \"{Name}\"",
-                                                              "",
-                                                              ValidatorModel.ValidationIssueSeverity.Error));
+                issues.Add(new ValidatorModel.ValidationIssue(
+                            $"Event \"{attrName.Substring(prefix.Length)}\" does not exist in \"{Name}\"",
+                            string.Empty,
+                            ValidatorModel.ValidationIssueSeverity.Error));
             }
 
             // TODO: Rule: Is Event name well formed (Valid C# Method name)?
@@ -125,9 +130,10 @@ public class Widget
                 if (setter == null || setter.Parameters.Count != 1)
                 {
                     // Yep. Isto non ecziste
-                    issues.Add(new ValidatorModel.ValidationIssue($"Property \"{attrName.Substring(prefix.Length)}\" does not exist in \"{Name}\"",
-                                                                  "",
-                                                                  ValidatorModel.ValidationIssueSeverity.Error));
+                    issues.Add(new ValidatorModel.ValidationIssue(
+                                $"Property \"{attrName.Substring(prefix.Length)}\" does not exist in \"{Name}\"",
+                                string.Empty,
+                                ValidatorModel.ValidationIssueSeverity.Error));
                 }
                 else
                 {
@@ -139,9 +145,10 @@ public class Widget
             {
                 if (!prop.HasSet)
                 {
-                    issues.Add(new ValidatorModel.ValidationIssue($"Property \"{attrName.Substring(prefix.Length)}\" is not writeable",
-                                                                  "",
-                                                                  ValidatorModel.ValidationIssueSeverity.Error));
+                    issues.Add(new ValidatorModel.ValidationIssue(
+                                $"Property \"{attrName.Substring(prefix.Length)}\" is not writeable",
+                                string.Empty,
+                                ValidatorModel.ValidationIssueSeverity.Error));
                 }
                 else
                 {
@@ -154,8 +161,10 @@ public class Widget
             {
                 if (propertyType == null)
                 {
-                    issues.Add(new ValidatorModel.ValidationIssue("Type for \"{attrName}\" is null", "",
-                                                                  ValidatorModel.ValidationIssueSeverity.Error));
+                    issues.Add(new ValidatorModel.ValidationIssue(
+                                "Type for \"{attrName}\" is null",
+                                string.Empty,
+                                ValidatorModel.ValidationIssueSeverity.Error));
                 }
 
                 CheckValueCompatibility(propertyType, attrName, value, ref issues);
@@ -175,35 +184,41 @@ public class Widget
             {
                 default: break;
                 case "System.String": break;
-                case "System.Boolean": Boolean.Parse(value); break;
-                case "System.Char": Char.Parse(value); break;
-                case "System.SByte": SByte.Parse(value); break;
-                case "System.Int16": Int16.Parse(value); break;
-                case "System.Int32": Int32.Parse(value); break;
-                case "System.Int64": Int64.Parse(value); break;
-                case "System.Byte": Byte.Parse(value); break;
-                case "System.UInt16": UInt16.Parse(value); break;
-                case "System.UInt32": UInt32.Parse(value); break;
-                case "System.UInt64": UInt64.Parse(value); break;
-                case "System.Single": Single.Parse(value); break;
-                case "System.Double": Double.Parse(value); break;
-                case "System.Decimal": Decimal.Parse(value); break;
+                case "System.Boolean": bool.Parse(value); break;
+                case "System.Char": char.Parse(value); break;
+                case "System.SByte": sbyte.Parse(value); break;
+                case "System.Int16": short.Parse(value); break;
+                case "System.Int32": int.Parse(value); break;
+                case "System.Int64": long.Parse(value); break;
+                case "System.Byte": byte.Parse(value); break;
+                case "System.UInt16": ushort.Parse(value); break;
+                case "System.UInt32": uint.Parse(value); break;
+                case "System.UInt64": ulong.Parse(value); break;
+                case "System.Single": float.Parse(value); break;
+                case "System.Double": double.Parse(value); break;
+                case "System.Decimal": decimal.Parse(value); break;
             }
         }
         catch (ArgumentNullException)
         {
-            issues.Add(new ValidatorModel.ValidationIssue($"Property \"{propertyName}\" can not have a null value", "",
-                                                          ValidatorModel.ValidationIssueSeverity.Error));
+            issues.Add(new ValidatorModel.ValidationIssue(
+                        $"Property \"{propertyName}\" can not have a null value",
+                        string.Empty,
+                        ValidatorModel.ValidationIssueSeverity.Error));
         }
         catch (FormatException)
         {
-            issues.Add(new ValidatorModel.ValidationIssue($"\"{value}\" is not a valid value for property \"{propertyName}\" of type \"{type.Name}\"", "",
-                                                          ValidatorModel.ValidationIssueSeverity.Error));
+            issues.Add(new ValidatorModel.ValidationIssue(
+                        $"\"{value}\" is not a valid value for property \"{propertyName}\" of type \"{type.Name}\"",
+                        string.Empty,
+                        ValidatorModel.ValidationIssueSeverity.Error));
         }
         catch (OverflowException)
         {
-            issues.Add(new ValidatorModel.ValidationIssue($"Value overflow for property \"{propertyName}\" of type \"{type.Name}\"", "",
-                                                          ValidatorModel.ValidationIssueSeverity.Error));
+            issues.Add(new ValidatorModel.ValidationIssue(
+                        $"Value overflow for property \"{propertyName}\" of type \"{type.Name}\"",
+                        string.Empty,
+                        ValidatorModel.ValidationIssueSeverity.Error));
         }
     }
 
@@ -212,8 +227,10 @@ public class Widget
         var issues = new List<ValidatorModel.ValidationIssue>();
         if (!_is_container)
         {
-            issues.Add(new ValidatorModel.ValidationIssue($"Type {Name} is not a container", "It can't have children",
-                                                          ValidatorModel.ValidationIssueSeverity.Error));
+            issues.Add(new ValidatorModel.ValidationIssue(
+                        $"Type {Name} is not a container",
+                        "It can't have children",
+                        ValidatorModel.ValidationIssueSeverity.Error));
         }
 
         // We still add so we can track the invalid information further down
@@ -221,14 +238,14 @@ public class Widget
         return issues;
     }
 
-    public override String ToString()
+    public override string ToString()
     {
         return ToString(0);
     }
 
     public string ToString(int indent)
     {
-        var spaces = new String(' ', 4 * indent);
+        var spaces = new string(' ', 4 * indent);
         var sb = new StringBuilder();
 
         sb.AppendLine(spaces + $"Widget: {Name}");

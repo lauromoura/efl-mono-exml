@@ -25,48 +25,52 @@ public class Logger
     private static ILogger logger;
     public static LogLevel Level { get; private set; }
 
-    public static void Critical(string msg,
-                                [CallerLineNumber] int line = 0,
-                                [CallerFilePath] string file = null,
-                                [CallerMemberName] string member = null)
+    public static void Critical(
+            string msg,
+            [CallerLineNumber] int line = 0,
+            [CallerFilePath] string file = null,
+            [CallerMemberName] string member = null)
     {
         Log(LogLevel.Critical, msg, line, file, member);
     }
 
-    public static void Error(string msg,
-                             [CallerLineNumber] int line = 0,
-                             [CallerFilePath] string file = null,
-                             [CallerMemberName] string member = null)
+    public static void Error(
+            string msg,
+            [CallerLineNumber] int line = 0,
+            [CallerFilePath] string file = null,
+            [CallerMemberName] string member = null)
     {
         Log(LogLevel.Error, msg, line, file, member);
     }
 
-    public static void Warning(string msg,
-                               [CallerLineNumber] int line = 0,
-                               [CallerFilePath] string file = null,
-                               [CallerMemberName] string member = null)
+    public static void Warning(
+            string msg,
+            [CallerLineNumber] int line = 0,
+            [CallerFilePath] string file = null,
+            [CallerMemberName] string member = null)
     {
         Log(LogLevel.Warning, msg, line, file, member);
     }
 
-    public static void Info(string msg,
-                            [CallerLineNumber] int line = 0,
-                            [CallerFilePath] string file = null,
-                            [CallerMemberName] string member = null)
+    public static void Info(
+            string msg,
+            [CallerLineNumber] int line = 0,
+            [CallerFilePath] string file = null,
+            [CallerMemberName] string member = null)
     {
         Log(LogLevel.Info, msg, line, file, member);
     }
 
-    public static void Debug(string msg,
-                             [CallerLineNumber] int line = 0,
-                             [CallerFilePath] string file = null,
-                             [CallerMemberName] string member = null)
+    public static void Debug(
+            string msg,
+            [CallerLineNumber] int line = 0,
+            [CallerFilePath] string file = null,
+            [CallerMemberName] string member = null)
     {
         Log(LogLevel.Debug, msg, line, file, member);
     }
 
-    private static void Log(LogLevel targetLevel, string msg,
-                            int line, string file, string member)
+    private static void Log(LogLevel targetLevel, string msg, int line, string file, string member)
     {
         if (logger == null)
         {
@@ -89,7 +93,7 @@ public class Logger
         Level = level;
     }
 
-    public static void SetLevelFromEnvironment(LogLevel fallback=LogLevel.Warning)
+    public static void SetLevelFromEnvironment(LogLevel fallback = LogLevel.Warning)
     {
         var required = Environment.GetEnvironmentVariable("EXML_LOG_LEVEL");
         var level = fallback;

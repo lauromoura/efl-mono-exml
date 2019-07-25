@@ -12,9 +12,6 @@ namespace Exml
 
 namespace ApiModel
 {
-    using ClassName = String;
-    using EnumField = String;
-
     // Notes:
     // * Name always must be the fully qualified name of the entity.
 
@@ -82,9 +79,10 @@ namespace ApiModel
                     direction = "ref ";
                     break;
                 default:
-                    direction = "";
+                    direction = string.Empty;
                     break;
             }
+
             return $"{direction}{Type} {Name}";
         }
 
@@ -242,11 +240,11 @@ namespace ApiModel
     public class Enum
     {
         public string Name { get; private set; }
-        public List<EnumField> Fields {get; private set; }
+        public List<string> Fields { get; private set; }
 
         private Enum()
         {
-            Fields = new List<EnumField>();
+            Fields = new List<string>();
         }
 
         public static Enum From(System.Type type)
@@ -255,7 +253,7 @@ namespace ApiModel
             var obj = new Enum();
             obj.Name = type.FullName;
 
-            foreach(var field in type.GetFields())
+            foreach (var field in type.GetFields())
             {
                 // Avoid the `value__` field
                 if (field.IsLiteral)
@@ -303,7 +301,7 @@ namespace ApiModel
 
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
             obj.Fields.Capacity = fields.Length;
-            foreach(var field in fields)
+            foreach (var field in fields)
             {
                 obj.Fields.Add(StructField.From(field));
             }
@@ -319,7 +317,14 @@ namespace ApiModel
         public TypeRef Type { get; private set; }
         public bool HasGet { get; private set; }
         public bool HasSet { get; private set; }
-        public bool HasGetSet { get { return HasSet && HasGet; } }
+        public bool HasGetSet
+        {
+            get
+            {
+                return HasSet && HasGet;
+            }
+        }
+
         public Visibility GetVisibility { get; private set; }
         public Visibility SetVisibility { get; private set; }
         // The property own visibility is the least restrictive visibility of their accessors
@@ -361,7 +366,7 @@ namespace ApiModel
 
         public override string ToString()
         {
-            var accessors = "";
+            var accessors = string.Empty;
 
             if (HasGet)
             {
@@ -383,7 +388,7 @@ namespace ApiModel
         public string Name { get; private set; }
         // Name of T in EventHandler<T>
         public TypeRef Type { get; private set; }
-        public Visibility Visibility {get; private set; }
+        public Visibility Visibility { get; private set; }
 
         public static Event From(EventInfo evt)
         {
@@ -455,7 +460,7 @@ namespace ApiModel
 
             var ifaces = type.GetInterfaces();
             obj.Interfaces.Capacity = ifaces.Length;
-            foreach(var iface in ifaces)
+            foreach (var iface in ifaces)
             {
                 obj.Interfaces.Add(TypeRef.From(iface));
             }
@@ -463,7 +468,7 @@ namespace ApiModel
             // No to pass BindingFlags, already gets only the public constructors by default
             var ctors = type.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             obj.Constructors.Capacity = ctors.Length;
-            foreach(var ctor in ctors)
+            foreach (var ctor in ctors)
             {
                 obj.Constructors.Add(Function.From(ctor));
             }
@@ -471,7 +476,7 @@ namespace ApiModel
             // FIXME Do we need to list static methods too?
             var methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             obj.Methods.Capacity = methods.Length;
-            foreach(var method in methods)
+            foreach (var method in methods)
             {
                 // Skip anonymous property accessors (get_Name)
                 if (!method.IsSpecialName)
@@ -482,7 +487,7 @@ namespace ApiModel
 
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             obj.Properties.Capacity = properties.Length;
-            foreach(var property in properties)
+            foreach (var property in properties)
             {
                 obj.Properties.Add(Property.From(property));
             }

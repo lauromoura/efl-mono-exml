@@ -50,6 +50,7 @@ public static class ExmlValidator
                             {
                                 continue; // Skip the outer tag
                             }
+
                             var parent = current;
 
                             current = new XmlModel.Widget();
@@ -66,6 +67,7 @@ public static class ExmlValidator
                                     attributeIssues.ForEach(issue => issue.AddContext(reader as IXmlLineInfo));
                                     issues.AddRange(attributeIssues);
                                 }
+
                                 reader.MoveToElement();
                             }
 
@@ -97,6 +99,7 @@ public static class ExmlValidator
                             {
                                 continue; // Skip outer tag
                             }
+
                             current = stack.Pop();
                             parent = current.Parent;
                             break;
@@ -107,8 +110,11 @@ public static class ExmlValidator
             }
             catch (XmlException ex)
             {
-                issues.Add(new ValidatorModel.ValidationIssue("Failed to read XML file.", ex.Message,
-                           ValidatorModel.ValidationIssueSeverity.CriticalError, reader as IXmlLineInfo));
+                issues.Add(new ValidatorModel.ValidationIssue(
+                            "Failed to read XML file.",
+                            ex.Message,
+                            ValidatorModel.ValidationIssueSeverity.CriticalError,
+                            reader as IXmlLineInfo));
             }
 
             return issues;
